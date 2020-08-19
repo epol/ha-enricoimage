@@ -1,0 +1,10 @@
+{
+  "domain": "enricoimage",
+  "name": "Enrico Image",
+  "documentation": "https://github.com/epol/ha-enricoimage/wiki",
+  "issue_tracker": "https://github.com/epol/ha-enricoimage/issues",
+  "dependencies": [],
+  "codeowners": ["@epol"],
+  "requirements": ["aiohttp", "numpy", "Pillow"],
+  "config_flow": true
+}
