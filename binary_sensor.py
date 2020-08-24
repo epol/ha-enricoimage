@@ -109,6 +109,11 @@ class ImageProcessorColor(BinarySensorEntity):
     #     """Unique ID of the sensor"""
     #     return f"{hash(self.imp.config_entry.data[CONF_URL]):x}-color-bs"
 
+    @property
+    def available(self) -> bool:
+        """Check if backend is available"""
+        return self.imp.available
+
     async def async_update(self):
         """Recalcolate img state."""
         _LOGGER.debug("Update request received")

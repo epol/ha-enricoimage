@@ -74,7 +74,16 @@ class ImageProcessor:
 
     async def refresh_image(self):
         _LOGGER.debug(f"Checking BW for {self.config_entry.data[CONF_NAME]}")
-        image = await self.get_image()
+        try:
+            image = await self.get_image()
+        except aiohttp.client_exceptions.ClientConnectorError as e:
+            _LOGGER.warning(f"Connection error: {str(e)}")
+            self.available = False
+        except aiohttp.client_exceptions.ClientResponseError as e:
+            _LOGGER.error(f"HTTP Error {str(e)}")
+            self.available = False
+        else:
+            self.available = True
         self.color_norm = self._get_color_norm(image)
 
     @property
@@ -195,8 +204,8 @@ async def get_image(hass, http_session, config):
         http_ssl = None
     else:
         http_ssl = False
-    if (config[CONF_USERNAME] is not None) and \
-       (config[CONF_PASSWORD] is not None):
+    if (CONF_USERNAME in config) and \
+       (CONF_PASSWORD in config):
         _LOGGER.debug("Using HTTP basic auth")
         http_auth = aiohttp.BasicAuth(
             config[CONF_USERNAME],
